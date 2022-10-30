@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import get from 'lodash/get';
-import prisma from '../../../lib/primsa';
+import prisma from '../../../../lib/primsa';
 
 export default async function GetProduct(
   req: NextApiRequest,

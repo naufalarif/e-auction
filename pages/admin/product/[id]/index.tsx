@@ -2,11 +2,11 @@
 import { FormEvent, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import Navbar from '../../../components/Navbar';
-import { deleteProductAPI, getDetailProductAPI, updateProductAPI, uploadImageAPI } from './api';
-import Img from '../../../components/Img';
-import { getProduct } from '../../../services/api';
-import { Product } from '../../../types';
+import Navbar from '../../../../components/Navbar';
+import { deleteProductAPI, getDetailProductAPI, updateProductAPI, uploadImageAPI } from '../api';
+import Img from '../../../../components/Img';
+import { getProductAPI } from '../../../../services/api';
+import { Product } from '../../../../types';
 
 interface StaticProps {
   params: {
@@ -21,7 +21,7 @@ interface OwnProps {
 }
 
 export async function getStaticPaths() {
-  const res = await getProduct();
+  const res = await getProductAPI();
   const paths = res.result.map((product: Product) => ({
     params: { id: product.id }
   }));
@@ -74,7 +74,7 @@ export default function EditProduct({
       }
     }
   });
-  const { isLoading, error, data } = useQuery([id], () => getDetailProductAPI(id));
+  const { isLoading, data } = useQuery([id], () => getDetailProductAPI(id));
 
   const handleChange = async (e: FormEvent<HTMLInputElement> | FormEvent<HTMLTextAreaElement>) => {
     if (e) e.preventDefault();
@@ -113,7 +113,8 @@ export default function EditProduct({
   }
 
   if (isLoading) return <span>Loading...</span>;
-  if (error) return <span>Something went wrong.</span>; 
+  if (data.status === 404) return <span>Something went wrong...</span>;
+
   const { result } = data;
 
   return (

@@ -1,14 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import CardProduct from '../../../components/CardProduct';
 import Navbar from '../../../components/Navbar';
-import { getProduct } from '../../../services/api';
+import { UseGetProduct } from './query';
 
 export default function Products() {
-  const { data, isLoading, isSuccess } = useQuery(['products'], getProduct);
+  const { data, isLoading, isSuccess } = UseGetProduct();
   if (isLoading && !isSuccess) return <span>Loading...</span>;
-  const { result } = data;
+  if (data.status === 404) return <span>Something went wrong...</span>;
 
+  const { result } = data;
   return (
     <>
       <Navbar />

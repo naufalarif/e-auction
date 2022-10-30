@@ -1,68 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
 import CardProduct from "../components/CardProduct";
-import Img from "../components/Img"
 import Navbar from "../components/Navbar";
-import { getProduct } from "../services/api";
-
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 3,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 4,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  // More products...
-]
+import { UseGetProduct } from "./query";
 
 export default function Home() {
-  const { data, isLoading, isSuccess } = useQuery(['products'], getProduct);
+  const { data, isLoading, isSuccess }: any = UseGetProduct();
   if (isLoading && !isSuccess) return <span>Loading...</span>;
+  if (data.status === 404) return <span>Something went wrong...</span>;
+
   const { result } = data;
   return (
     <>
@@ -96,17 +40,3 @@ export default function Home() {
     </>
   )
 }
-
-
-      // <footer className={styles.footer}>
-      //   <a
-      //     href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-      //     target="_blank"
-      //     rel="noopener noreferrer"
-      //   >
-      //     Powered by{' '}
-      //     <span className={styles.logo}>
-      //       <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-      //     </span>
-      //   </a>
-      // </footer>

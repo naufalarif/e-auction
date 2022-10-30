@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../lib/primsa';
+import prisma from '../../../lib/primsa';
 
 export default async function AddProduct(
   req: NextApiRequest,
