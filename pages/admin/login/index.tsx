@@ -13,8 +13,7 @@ export default function AdminLogin() {
   const { mutate, isLoading } = useMutation(loginAdmin, {
     onSuccess: data => {
       if (data.status === 200) {
-        localStorage.setItem('admin', data.result);
-        route.push('/');
+        localStorage.setItem('admin/session', data.result);
         setErrorMessage(null);
       } else {
         setErrorMessage(data.result);

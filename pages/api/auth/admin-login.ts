@@ -1,8 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import md5 from 'md5';
-import prisma from '../../lib/primsa';
-import jwt from 'jsonwebtoken';
+import prisma from '../../../lib/primsa';
+// import jwt from 'jsonwebtoken';
+import { serialize } from 'cookie';
+import { NextResponse } from 'next/server';
+import { sign } from '../../../utils/jwt';
 
 type Data = {
   message: string;
@@ -22,13 +25,20 @@ export default async function AdminLogin(
         where: { name, password: passwordHashed },
       });
       if (user.length === 0) return res.status(404).json({ message: 'login_admin_failed', result: 'Who are you?', status: 404 });
-      const token = jwt.sign({ name }, 'secretss', { expiresIn: '1 day' });
+      const token = await sign({ name }, 'secretss');
+      const serialised = serialize("AdminSession", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 30,
+        path: "/",
+      });
+      res.setHeader("Set-Cookie", serialised);
       return res.status(200).json({ message: 'login_admin_success', result: token, status: 200 });
     } else {
       return res.status(403).json({ message: 'forbidden_route', status: 403 });
     }
   } catch (error) {
-    console.log('db error: ', error);
     return res.status(500).json({ message: 'server_error', result: error, status: 500 });
   }
 }

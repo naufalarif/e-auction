@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Fragment, FunctionComponent } from 'react';
+import { Fragment, FunctionComponent, useEffect, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import isEmpty from 'lodash/isEmpty';
 
 import Img from '../Img';
+import { getStorage } from '../../utils/storage';
 
 const user = {
   name: 'Tom Cook',
@@ -31,9 +32,18 @@ interface Menu {
 }
 
 const Navbar: FunctionComponent<{}> = () => {
-  const location = useRouter();
-  const slugAdmin = location.pathname.substring(7);
-  const slugUser = location.pathname.substring(1);
+  const { pathname } = useRouter();
+  const [isUserLoggedIn, setUserLoggedIn] = useState<boolean>(false);
+
+  const slugAdmin = pathname.substring(7);
+  const slugUser = pathname.substring(1);
+  const isAdmin = pathname.includes('admin');
+
+  useEffect(() => {
+    const session = getStorage('admin/session');
+    if (session) setUserLoggedIn(true);
+  }, []);
+
   const isActiveAdmin = (path: string): boolean => {
     if (slugAdmin.includes('product') && !isEmpty(path)) {
       return slugAdmin.includes(path);
@@ -41,7 +51,6 @@ const Navbar: FunctionComponent<{}> = () => {
     return path === slugAdmin
   };
   const isActiveUser = (path: string): boolean => path === slugUser;
-  const isAdmin = location.pathname.includes('admin');
 
   const menuUser: Menu[] = [
     { name: 'Home', href: '/', current: isActiveUser('') },
@@ -59,7 +68,6 @@ const Navbar: FunctionComponent<{}> = () => {
     { name: 'Report', href: '/admin/report', current: isActiveAdmin('report') },
   ];
 
-  const isUserLoggedIn = false;
   const menu: Menu[] = !isAdmin ? menuUser : menuAdmin;
   return (
     <nav className="min-h-full">
