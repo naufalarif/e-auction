@@ -4,6 +4,7 @@ import { FormEvent, Fragment, useEffect, useState } from 'react';
 import Img from '../../../components/Img';
 import { loginAdmin } from './api';
 import Router from 'next/router';
+import { getStorage } from '../../../utils/storage';
 
 export default function AdminLogin() {
   const [name, setName] = useState<string>('');
@@ -15,6 +16,7 @@ export default function AdminLogin() {
       if (data.status === 200) {
         localStorage.setItem('admin/session', data.result);
         setErrorMessage(null);
+        route.push('/admin');
       } else {
         setErrorMessage(data.result);
       }
@@ -32,7 +34,7 @@ export default function AdminLogin() {
     }
   }
 
-  const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('admin') : null;
+  const isLoggedIn = getStorage('admin/session');
   if (isLoggedIn) route.push('/admin');
   return (
     <Fragment>

@@ -5,7 +5,7 @@ export async function sign(payload: any, secret: string): Promise<string> {
   const exp = iat + 60* 60; // one hour
 
   return new SignJWT({...payload})
-    .setProtectedHeader({alg: 'HS256', typ: 'JWT'})
+    .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
     .setExpirationTime(exp)
     .setIssuedAt(iat)
     .setNotBefore(iat)
@@ -17,6 +17,5 @@ export async function verify(token: string, secret: string): Promise<any> {
   // run some checks on the returned payload, perhaps you expect some specific values
 
   // if its all good, return it, or perhaps just return a boolean
-  console.log({ payload });
   return payload;
 }

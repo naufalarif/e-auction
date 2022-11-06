@@ -4,7 +4,6 @@ import md5 from 'md5';
 import prisma from '../../../lib/primsa';
 // import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
-import { NextResponse } from 'next/server';
 import { sign } from '../../../utils/jwt';
 
 type Data = {
@@ -30,7 +29,7 @@ export default async function AdminLogin(
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        maxAge: 60 * 60 * 24 * 30,
+        maxAge: 60 * 60 * 24 * 1,
         path: "/",
       });
       res.setHeader("Set-Cookie", serialised);
